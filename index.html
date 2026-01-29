@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Controle Financeiro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      max-width: 900px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    .ativo { color: green; font-weight: bold; }
+    .encerrado { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Controle Financeiro</h1>
+
+  <div class="card">
+    <h2>Resumo</h2>
+    <p>Clientes ativos: <span id="totalClientes"></span></p>
+    <p>Faturamento mensal: R$ <span id="faturamento"></span></p>
+  </div>
+
+  <div class="card">
+    <h2>Clientes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Valor</th>
+          <th>Entrada</th>
+          <th>Saída</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaClientes"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const clientes = [
+      { nome: "Cliente Exemplo", valor: 1500, entrada: "2025-01-01", saida: null },
+      { nome: "Outro Cliente", valor: 800, entrada: "2024-12-10", saida: "2025-02-01" }
+    ];
+
+    const ativos = clientes.filter(c => c.saida === null);
+    const faturamento = ativos.reduce((soma, c) => soma + c.valor, 0);
+
+    document.getElementById("totalClientes").innerText = ativos.length;
+    document.getElementById("faturamento").innerText = faturamento;
+
+    const tabela = document.getElementById("tabelaClientes");
+    clientes.forEach(c => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${c.nome}</td>
+        <td>R$ ${c.valor}</td>
+        <td>${c.entrada}</td>
+        <td>${c.saida || "-"}</td>
+        <td class="${c.saida ? "encerrado" : "ativo"}">
+          ${c.saida ? "Encerrado" : "Ativo"}
+        </td>
+      `;
+      tabela.appendChild(tr);
+    });
+  </script>
+
+</body>
+</html>
